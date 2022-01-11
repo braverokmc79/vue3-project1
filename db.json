@@ -1,0 +1,51 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "todos": [
+    {
+      "subject": "수요일",
+      "completed": false,
+      "id": 5
+    },
+    {
+      "subject": "추가",
+      "completed": true,
+      "id": 6
+    },
+    {
+      "subject": "다시 추가",
+      "completed": false,
+      "id": 7
+    },
+    {
+      "subject": "다시",
+      "completed": false,
+      "id": 8
+    },
+    {
+      "subject": "22",
+      "completed": false,
+      "id": 9
+    },
+    {
+      "subject": "ㄴ",
+      "completed": false,
+      "id": 10
+    }
+  ]
+}
