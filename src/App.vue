@@ -27,16 +27,23 @@
 
     <div class="mt-3">
       <nav aria-label="Page navigation example ">
-        <ul class="pagination">
-          <li class="page-item">
+        <ul class="pagination" style="justify-content: center">
+          <li v-if="currentPage !== 1" class="page-item">
             <a class="page-link" href="#" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
+
+          <li
+            v-for="page in numberOfPages"
+            :key="page"
+            class="page-item"
+            :class="currentPage === page ? 'active' : ''"
+          >
+            <a class="page-link" href="#">{{ page }}</a>
+          </li>
+
+          <li v-if="numberOfPages !== currentPage" class="page-item">
             <a class="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
@@ -44,6 +51,8 @@
         </ul>
       </nav>
     </div>
+
+    {{ currentPage }}
   </div>
 </template>
 
@@ -62,19 +71,23 @@ export default {
   setup() {
     const todos = ref([]);
     const error = ref("");
-    const totalPage = ref(0);
+    const numberOfTodos = ref(0);
     const limit = 5;
-    const page = ref(1);
+    const currentPage = ref(7);
+
+    const numberOfPages = computed(() => {
+      return Math.ceil(numberOfTodos.value / limit);
+    });
 
     const getTodos = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/todos/?_page=${page.value}&_limit=${limit}`
+          `http://localhost:3000/todos/?_sort=id&_order=desc&_page=${currentPage.value}&_limit=${limit}`
         );
 
-        totalPage.value = parseInt(res.headers["x-total-count"]);
+        numberOfTodos.value = parseInt(res.headers["x-total-count"]);
 
-        console.log("totalPage : " + totalPage.value);
+        console.log("totalPage : " + numberOfTodos.value);
 
         todos.value = res.data;
       } catch (err) {
@@ -96,7 +109,9 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          todos.value.push(res.data);
+
+          //todos.value.push(res.data);
+          getTodos();
         })
         .catch((err) => {
           console.log(err);
@@ -154,6 +169,8 @@ export default {
       filteredTodos,
       error,
       toggleTodo,
+      numberOfPages,
+      currentPage,
     };
   },
 };
