@@ -29,30 +29,36 @@
       <nav aria-label="Page navigation example ">
         <ul class="pagination" style="justify-content: center">
           <li v-if="currentPage !== 1" class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
+            <a
+              class="page-link"
+              @click="getTodos(currentPage - 1)"
+              aria-label="Previous"
+            >
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
 
           <li
-            v-for="page in numberOfPages"
+            v-for="page in list"
             :key="page"
             class="page-item"
             :class="currentPage === page ? 'active' : ''"
           >
-            <a class="page-link" href="#">{{ page }}</a>
+            <a class="page-link" @click="getTodos(page)">{{ page }}</a>
           </li>
 
           <li v-if="numberOfPages !== currentPage" class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
+            <a
+              class="page-link"
+              @click="getTodos(currentPage + 1)"
+              aria-label="Next"
+            >
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>
         </ul>
       </nav>
     </div>
-
-    {{ currentPage }}
   </div>
 </template>
 
@@ -71,26 +77,79 @@ export default {
   setup() {
     const todos = ref([]);
     const error = ref("");
-    const numberOfTodos = ref(0);
-    const limit = 5;
-    const currentPage = ref(7);
+    const numberOfTodos = ref(0); //전체 게시글 갯수
+    const limit = 5; //한페이지에 보여줄 목록 갯수
+    const currentPage = ref(); //현재 페이지
+    const block = 5; // 페이지 block 에 표시할 갯수
+    let first = null; // 첫번째 페이지번호
+    let end = null; // 마지막 페이지 번호
+    let list = ref([]); // 페이지 block 에 표시할 번호들
 
     const numberOfPages = computed(() => {
       return Math.ceil(numberOfTodos.value / limit);
     });
 
-    const getTodos = async () => {
+    const pageDataSetting = ({ total, limit, block, page }) => {
+      const totalPage = Math.ceil(total / limit);
+      let currentPage = page;
+      const first =
+        currentPage > 1 ? parseInt(currentPage, 10) - parseInt(1, 10) : null;
+      const end =
+        totalPage !== currentPage
+          ? parseInt(currentPage, 10) + parseInt(1, 10)
+          : null;
+
+      let startIndex = (Math.ceil(currentPage / block) - 1) * block + 1;
+      let endIndex =
+        startIndex + block > totalPage ? totalPage : startIndex + block - 1;
+      let list = [];
+      for (let index = startIndex; index <= endIndex; index++) {
+        list.push(index);
+      }
+      return { first, end, list, currentPage };
+    };
+
+    const getTodos = async (page) => {
+      if (page == undefined) page = 1;
+      console.log("page :" + page);
+
       try {
-        const res = await axios.get(
-          `http://localhost:3000/todos/?_sort=id&_order=desc&_page=${currentPage.value}&_limit=${limit}`
-        );
+        await axios
+          .get(
+            `http://localhost:3000/todos/?_sort=id&_order=desc&_page=${page}&_limit=${limit}`
+          )
+          .then((res) => {
+            //1.전체 게시글 갯수 가져오기
+            numberOfTodos.value = parseInt(res.headers["x-total-count"]);
 
-        numberOfTodos.value = parseInt(res.headers["x-total-count"]);
+            //2. 현재 페이지
+            currentPage.value = page;
 
-        console.log("totalPage : " + numberOfTodos.value);
+            const pagetData = {
+              total: numberOfTodos.value,
+              limit: limit,
+              block: block,
+              page: page,
+            };
 
-        todos.value = res.data;
-      } catch (err) {
+            console.log("pagetData : ");
+            console.log(pagetData);
+
+            //3.페이지 계산처리
+            const pageCalceData = pageDataSetting(pagetData);
+            console.log("pageCalceData : ");
+            console.log(pageCalceData);
+
+            first = pageCalceData.first;
+            end = pageCalceData.end;
+            list.value = pageCalceData.list;
+
+            console.log(list.value);
+
+            //4.목록에 출력 데이터
+            todos.value = res.data;
+          });
+      } catch (error) {
         error.value = "데이트를 가져오는데 문제가 발생했습니다.";
       }
     };
@@ -117,8 +176,6 @@ export default {
           console.log(err);
           error.value = "데이트를 가져오는데 문제가 발생했습니다.";
         });
-
-      console.log("hello");
     };
 
     const deleteTodo = async (index) => {
@@ -171,6 +228,12 @@ export default {
       toggleTodo,
       numberOfPages,
       currentPage,
+      getTodos,
+      block,
+      pageDataSetting,
+      first,
+      end,
+      list,
     };
   },
 };
@@ -179,5 +242,8 @@ export default {
 <style scoped>
 .blue {
   color: blue;
+}
+.page-link {
+  cursor: pointer;
 }
 </style>
