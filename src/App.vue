@@ -65,7 +65,7 @@
 
 
 <script>
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed, watch } from "vue";
 import TodoSimpleForm from "@/components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
 import axios from "axios";
@@ -80,14 +80,14 @@ export default {
     const error = ref("");
     const numberOfTodos = ref(0); //전체 게시글 갯수
     const limit = 5; //한페이지에 보여줄 목록 갯수
-    const currentPage = ref(); //현재 페이지
+    const currentPage = ref(1); //현재 페이지
     const block = 5; // 페이지 block 에 표시할 갯수
     let first = null; // 첫번째 페이지번호
     let end = null; // 마지막 페이지 번호
     let list = ref([]); // 페이지 block 에 표시할 번호들
 
-    watchEffect(() => {
-      console.log(end);
+    watch([currentPage, numberOfTodos], (currentPage, prev) => {
+      console.log(currentPage, prev);
     });
 
     const numberOfPages = computed(() => {
