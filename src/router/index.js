@@ -6,7 +6,7 @@ import Todos from '../views/todos/index.vue'
 // 1.home   2.todos   3.todos/create    4.todos/:id
 const routes = [
   {
-    path: '/Home',
+    path: '/',
     name: 'Home',
     component: Home
   },
