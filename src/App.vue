@@ -14,6 +14,7 @@
     </div>
 
     <TodoSimpleForm :todos="todos" @add-todo="addTodo" class="mb-5" />
+    <h6>게시글 수 : {{ numberOfTodos }}</h6>
 
     <div v-if="!filteredTodos.length">검색 결과가 없습니다.</div>
 
@@ -64,7 +65,7 @@
 
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, watchEffect } from "vue";
 import TodoSimpleForm from "@/components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
 import axios from "axios";
@@ -84,6 +85,10 @@ export default {
     let first = null; // 첫번째 페이지번호
     let end = null; // 마지막 페이지 번호
     let list = ref([]); // 페이지 block 에 표시할 번호들
+
+    watchEffect(() => {
+      console.log(end);
+    });
 
     const numberOfPages = computed(() => {
       return Math.ceil(numberOfTodos.value / limit);
@@ -111,7 +116,7 @@ export default {
 
     const getTodos = async (page) => {
       if (page == undefined) page = 1;
-      console.log("page :" + page);
+      //console.log("page :" + page);
 
       try {
         await axios
@@ -132,19 +137,19 @@ export default {
               page: page,
             };
 
-            console.log("pagetData : ");
-            console.log(pagetData);
+            // console.log("pagetData : ");
+            //  console.log(pagetData);
 
             //3.페이지 계산처리
             const pageCalceData = pageDataSetting(pagetData);
-            console.log("pageCalceData : ");
-            console.log(pageCalceData);
+            //  console.log("pageCalceData : ");
+            //  console.log(pageCalceData);
 
             first = pageCalceData.first;
             end = pageCalceData.end;
             list.value = pageCalceData.list;
 
-            console.log(list.value);
+            //console.log(list.value);
 
             //4.목록에 출력 데이터
             todos.value = res.data;
@@ -234,6 +239,7 @@ export default {
       first,
       end,
       list,
+      numberOfTodos,
     };
   },
 };
