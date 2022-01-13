@@ -28,7 +28,9 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-info">저장</button>
+      <button type="submit" class="btn btn-info" :disabled="!todoUpdated">
+        저장
+      </button>
 
       <button type="button" class="btn btn-dark ml-2" @click="moveTodoListpage">
         취소
@@ -38,37 +40,34 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
+import _ from "lodash";
 
 export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
     const todo = ref(null);
+    const originalTodo = ref(null);
     const loading = ref(true);
     const todoId = route.params.id;
 
     const getTodo = async () => {
       const res = await axios.get("http://localhost:3000/todos/" + todoId);
-      todo.value = res.data;
+      todo.value = { ...res.data };
+      originalTodo.value = { ...res.data };
       loading.value = false;
     };
+
+    const todoUpdated = computed(() => {
+      return !_.isEqual(todo.value, originalTodo.value);
+    });
 
     getTodo();
 
     const toggleTodoStatus = () => {
-      // const res = await axios.patch("http://localhost:3000/todos/" + id, {
-      //   completed: !completed,
-      // });
-      // console.log(res);
-      // router.push({
-      //   name: "Todo",
-      //   params: {
-      //     id: id,
-      //   },
-      // });
       todo.value.completed = !todo.value.completed;
     };
 
@@ -84,7 +83,7 @@ export default {
         completed: todo.value.completed,
       });
 
-      console.log(res);
+      originalTodo.value = { ...res.data };
     };
 
     return {
@@ -93,6 +92,7 @@ export default {
       toggleTodoStatus,
       moveTodoListpage,
       onSave,
+      todoUpdated,
     };
   },
 };
