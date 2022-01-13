@@ -16,10 +16,10 @@
     <TodoSimpleForm :todos="todos" @add-todo="addTodo" class="mb-5" />
     <h6>게시글 수 : {{ numberOfTodos }}</h6>
 
-    <div v-if="!filteredTodos.length">검색 결과가 없습니다.</div>
+    <div v-if="!todos.length">검색 결과가 없습니다.</div>
 
     <TodoList
-      :todos="filteredTodos"
+      :todos="todos"
       @toggle-todo="toggleTodo"
       @delete-todo="deleteTodo"
     />
@@ -48,7 +48,10 @@
             <a class="page-link" @click="getTodos(page)">{{ page }}</a>
           </li>
 
-          <li v-if="numberOfPages !== currentPage" class="page-item">
+          <li
+            v-if="numberOfPages !== 0 && numberOfPages !== currentPage"
+            class="page-item"
+          >
             <a
               class="page-link"
               @click="getTodos(currentPage + 1)"
@@ -86,9 +89,15 @@ export default {
     let end = null; // 마지막 페이지 번호
     let list = ref([]); // 페이지 block 에 표시할 번호들
 
-    watch([currentPage, numberOfTodos], (currentPage, prev) => {
-      console.log(currentPage, prev);
+    const searchText = ref("");
+
+    watch(searchText, () => {
+      getTodos(1);
     });
+
+    // watch([currentPage, numberOfTodos], (currentPage, prev) => {
+    //   console.log(currentPage, prev);
+    // });
 
     const numberOfPages = computed(() => {
       return Math.ceil(numberOfTodos.value / limit);
@@ -121,7 +130,7 @@ export default {
       try {
         await axios
           .get(
-            `http://localhost:3000/todos/?_sort=id&_order=desc&_page=${page}&_limit=${limit}`
+            `http://localhost:3000/todos/?subject_like=${searchText.value}&_sort=id&_order=desc&_page=${page}&_limit=${limit}`
           )
           .then((res) => {
             //1.전체 게시글 갯수 가져오기
@@ -211,24 +220,23 @@ export default {
       }
     };
 
-    const searchText = ref("");
-    const filteredTodos = computed(() => {
-      if (searchText.value) {
-        //console.log("1");
-        return todos.value.filter((todo) => {
-          return todo.subject.includes(searchText.value);
-        });
-      }
-      //console.log("2");
-      return todos.value;
-    });
+    // const filteredTodos = computed(() => {
+    //   if (searchText.value) {
+    //     //console.log("1");
+    //     return todos.value.filter((todo) => {
+    //       return todo.subject.includes(searchText.value);
+    //     });
+    //   }
+    //   //console.log("2");
+    //   return todos.value;
+    // });
 
     return {
       todos,
       addTodo,
       deleteTodo,
       searchText,
-      filteredTodos,
+      // filteredTodos,
       error,
       toggleTodo,
       numberOfPages,
