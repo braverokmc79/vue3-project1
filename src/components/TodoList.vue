@@ -11,6 +11,7 @@
             class="form-check-input"
             v-model="todo.completed"
             @change="toggleTodo(todo)"
+            @click.stop
           />
           <label
             class="form-check-label"
@@ -21,7 +22,7 @@
         </div>
 
         <div>
-          <button class="btn btn-danger btn-sm" @click="deleteTodo(index)">
+          <button class="btn btn-danger btn-sm" @click.stop="deleteTodo(index)">
             Delete
           </button>
         </div>
@@ -44,8 +45,8 @@ export default {
   setup(props, { emit }) {
     const router = useRouter();
 
-    const toggleTodo = (index) => {
-      emit("toggle-todo", index);
+    const toggleTodo = (todo) => {
+      emit("toggle-todo", todo);
     };
 
     const deleteTodo = (todo) => {

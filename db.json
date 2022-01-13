@@ -369,18 +369,13 @@
     },
     {
       "subject": "5",
-      "completed": false,
+      "completed": true,
       "id": 78
     },
     {
       "subject": "강아지",
       "completed": false,
       "id": 88
-    },
-    {
-      "subject": "ㄹㄹ",
-      "completed": false,
-      "id": 89
     }
   ]
 }
