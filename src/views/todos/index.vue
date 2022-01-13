@@ -1,69 +1,66 @@
 <template>
-  <div class="container">
-    <h2>To-Do List</h2>
+  <h2>To-Do List</h2>
+  <input
+    type="text"
+    class="form-control mt-5 mb-5"
+    v-model="searchText"
+    placeholder="Search"
+    @keyup.enter="searchTodo"
+  />
 
-    <input
-      type="text"
-      class="form-control mt-5 mb-5"
-      v-model="searchText"
-      placeholder="Search"
-      @keyup.enter="searchTodo"
-    />
+  <div style="color: red" class="mb-3">
+    {{ error }}
+  </div>
 
-    <div style="color: red" class="mb-3">
-      {{ error }}
-    </div>
+  <TodoSimpleForm :todos="todos" @add-todo="addTodo" class="mb-5" />
+  <h6>게시글 수 : {{ numberOfTodos }}</h6>
 
-    <TodoSimpleForm :todos="todos" @add-todo="addTodo" class="mb-5" />
-    <h6>게시글 수 : {{ numberOfTodos }}</h6>
+  <div v-if="!todos.length">검색 결과가 없습니다.</div>
 
-    <div v-if="!todos.length">검색 결과가 없습니다.</div>
+  <TodoList
+    :todos="todos"
+    @toggle-todo="toggleTodo"
+    @delete-todo="deleteTodo"
+  />
 
-    <TodoList
-      :todos="todos"
-      @toggle-todo="toggleTodo"
-      @delete-todo="deleteTodo"
-    />
+  <hr />
 
-    <hr />
-
-    <div class="mt-3">
-      <nav aria-label="Page navigation example ">
-        <ul class="pagination" style="justify-content: center">
-          <li v-if="currentPage !== 1" class="page-item">
-            <a
-              class="page-link"
-              @click="getTodos(currentPage - 1)"
-              aria-label="Previous"
-            >
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-
-          <li
-            v-for="page in list"
-            :key="page"
-            class="page-item"
-            :class="currentPage === page ? 'active' : ''"
+  <div class="mt-3">
+    <nav aria-label="Page navigation example ">
+      <ul class="pagination" style="justify-content: center">
+        <li v-if="currentPage !== 1" class="page-item">
+          <a
+            class="page-link"
+            @click="getTodos(currentPage - 1)"
+            aria-label="Previous"
           >
-            <a class="page-link" @click="getTodos(page)">{{ page }}</a>
-          </li>
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
 
-          <li
-            v-if="numberOfPages !== 0 && numberOfPages !== currentPage"
-            class="page-item"
+        <li
+          v-for="page in list"
+          :key="page"
+          class="page-item"
+          :class="currentPage === page ? 'active' : ''"
+        >
+          <a class="page-link" @click="getTodos(page)">{{ page }}</a>
+        </li>
+
+        <li
+          v-if="numberOfPages !== 0 && numberOfPages !== currentPage"
+          class="page-item"
+        >
+          <a
+            class="page-link"
+            @click="getTodos(currentPage + 1)"
+            aria-label="Next"
           >
-            <a
-              class="page-link"
-              @click="getTodos(currentPage + 1)"
-              aria-label="Next"
-            >
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
