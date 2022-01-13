@@ -7,6 +7,7 @@
       class="form-control mt-5 mb-5"
       v-model="searchText"
       placeholder="Search"
+      @keyup.enter="searchTodo"
     />
 
     <div style="color: red" class="mb-3">
@@ -91,8 +92,17 @@ export default {
 
     const searchText = ref("");
 
-    watch(searchText, () => {
+    let timeout = null;
+    const searchTodo = () => {
       getTodos(1);
+    };
+
+    watch(searchText, () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        console.log(searchText.value);
+        getTodos(1);
+      }, 2000);
     });
 
     // watch([currentPage, numberOfTodos], (currentPage, prev) => {
@@ -170,35 +180,26 @@ export default {
 
     getTodos();
 
-    const addTodo = (todo) => {
+    const addTodo = async (todo) => {
       //데이터베이스 todo 를 저장
       error.value = "";
-      console.log("start");
-
-      axios
-        .post("http://localhost:3000/todos/", {
+      try {
+        await axios.post("http://localhost:3000/todos/", {
           subject: todo.subject,
           completed: todo.completed,
-        })
-        .then((res) => {
-          console.log(res);
-
-          //todos.value.push(res.data);
-          getTodos();
-        })
-        .catch((err) => {
-          console.log(err);
-          error.value = "데이트를 가져오는데 문제가 발생했습니다.";
         });
+        getTodos(1);
+      } catch (err) {
+        error.value = "데이트를 가져오는데 문제가 발생했습니다.";
+      }
     };
 
     const deleteTodo = async (index) => {
       error.value = "";
       const id = todos.value[index].id;
       try {
-        const res = await axios.delete("http://localhost:3000/todos/" + id);
-        console.log(res);
-        todos.value.splice(index, 1);
+        await axios.delete("http://localhost:3000/todos/" + id);
+        getTodos(1);
       } catch (err) {
         console.log(err);
         error.value = "데이트를 가져오는데 문제가 발생했습니다.";
@@ -248,6 +249,7 @@ export default {
       end,
       list,
       numberOfTodos,
+      searchTodo,
     };
   },
 };
