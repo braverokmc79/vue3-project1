@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
-    <router-link class="navbar-brand" to="/">Macaronics</router-link>
+    <router-link class="navbar-brand" :to="{ name: 'Home' }"
+      >Macaronics</router-link
+    >
     <button
       class="navbar-toggler"
       type="button"
