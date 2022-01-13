@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
-    <a class="navbar-brand" href="#">Macaronics</a>
+    <router-link class="navbar-brand" to="/">Macaronics</router-link>
     <button
       class="navbar-toggler"
       type="button"
@@ -16,11 +16,9 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#"
-            >Home <span class="sr-only">(current)</span></a
-          >
+          <router-link class="nav-link" to="/todos"> Todos </router-link>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li>
         <li class="nav-item dropdown">
@@ -40,7 +38,7 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>
-        </li>
+        </li> -->
       </ul>
       <!-- <form class="form-inline my-2 my-lg-0">
         <input
