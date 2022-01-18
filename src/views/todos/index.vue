@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="opacity: 1">
     <Toast v-if="showToast" :message="toastMessage" :type="toastAllertType" />
 
     <div class="d-flex justify-content-between mb-3">
