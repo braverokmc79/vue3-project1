@@ -3,25 +3,19 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Delete Todo</h5>
+          <h5 class="modal-title">
+            <slot name="title"></slot>
+          </h5>
 
           <button type="button" class="close">
             <span aria-hidden="true" @click="onClose">&times;</span>
           </button>
         </div>
-        <div class="modal-body">Are you sure you want to delete the todo?</div>
+        <div class="modal-body">
+          <slot name="body"> </slot>
+        </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            @click="onClose"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-          <button type="button" class="btn btn-danger" @click="onDelete">
-            Delete
-          </button>
+          <slot name="footer"> </slot>
         </div>
       </div>
     </div>
@@ -35,13 +29,8 @@ export default {
       emit("close");
     };
 
-    const onDelete = () => {
-      emit("delete");
-    };
-
     return {
       onClose,
-      onDelete,
     };
   },
 };

@@ -38,7 +38,8 @@
 <script>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import Modal from "@/components/Modal.vue";
+//import Modal from "@/components/Modal.vue";
+import Modal from "@/components/DeleteModal.vue";
 
 export default {
   components: {

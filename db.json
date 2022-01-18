@@ -421,17 +421,6 @@
       "subject": "2",
       "completed": true,
       "id": 97
-    },
-    {
-      "subject": "fse",
-      "completed": false,
-      "id": 98
-    },
-    {
-      "subject": "ㄹㄴㄷ",
-      "completed": false,
-      "body": "34234",
-      "id": 101
     }
   ]
 }
