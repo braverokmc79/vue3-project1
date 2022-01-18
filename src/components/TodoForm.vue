@@ -7,6 +7,10 @@
           <div class="form-group">
             <label>제목</label>
             <input type="text" class="form-control" v-model="todo.subject" />
+
+            <div v-if="subjectError" class="m-3">
+              <span class="alert alert-danger"> {{ subjectError }}</span>
+            </div>
           </div>
         </div>
 
@@ -80,6 +84,7 @@ export default {
       completed: false,
       body: "",
     });
+    const subjectError = ref("");
     const originalTodo = ref(null);
     const loading = ref(false);
     const todoId = route.params.id;
@@ -120,8 +125,13 @@ export default {
     };
 
     const onSave = async () => {
-
-        
+      subjectError.value = "";
+      if (!todo.value.subject) {
+        subjectError.value = "Subject id required";
+        return;
+      } else {
+        subjectError.value = "";
+      }
       try {
         let res;
         const data = {
@@ -158,6 +168,7 @@ export default {
       showToast,
       toastMessage,
       toastAllertType,
+      subjectError,
     };
   },
 };
