@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Todos from '../views/todos/index.vue'
 import Todo from '../views/todos/_id.vue'
-
+import TodoCreate from '../views/todos/create/index.vue'
 
 // 1.home   2.todos   3.todos/create    4.todos/:id
 const routes = [
@@ -19,7 +19,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     //component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     component: Todos
+  }
+  ,
+  {
+    path: '/todos/create',
+    name: 'TodoCreate',
+    component: TodoCreate
   },
+
   {
     path: '/todos/:id',
     name: 'Todo',

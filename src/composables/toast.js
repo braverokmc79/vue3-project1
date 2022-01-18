@@ -17,7 +17,7 @@ export const useToast = () => {
         }, 3000);
     };
     onUnmounted(() => {
-        console.log("onUnmounted ");
+        console.log("onUnmounted");
         clearTimeout(timeout.value);
     });
     return {

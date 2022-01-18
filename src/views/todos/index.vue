@@ -1,86 +1,96 @@
 <template>
-  <Toast v-if="showToast" :message="toastMessage" :type="toastAllertType" />
-  <h2>To-Do List</h2>
-  <input
-    type="text"
-    class="form-control mt-5 mb-5"
-    v-model="searchText"
-    placeholder="Search"
-    @keyup.enter="searchTodo"
-  />
+  <div>
+    <Toast v-if="showToast" :message="toastMessage" :type="toastAllertType" />
 
-  <div style="color: red" class="mb-3">
-    {{ error }}
-  </div>
+    <div class="d-flex justify-content-between mb-3">
+      <h2>To-Do List</h2>
+      <button type="button" class="btn btn-primary" @click="moveToCreatePage">
+        Create Todo
+      </button>
+    </div>
 
-  <TodoSimpleForm :todos="todos" @add-todo="addTodo" class="mb-5" />
-  <h6>게시글 수 : {{ numberOfTodos }}</h6>
+    <input
+      type="text"
+      class="form-control mt-5 mb-5"
+      v-model="searchText"
+      placeholder="Search"
+      @keyup.enter="searchTodo"
+    />
 
-  <div v-if="!todos.length">검색 결과가 없습니다.</div>
+    <div style="color: red" class="mb-3">
+      {{ error }}
+    </div>
 
-  <TodoList
-    :todos="todos"
-    @toggle-todo="toggleTodo"
-    @delete-todo="deleteTodo"
-  />
+    <h6>게시글 수 : {{ numberOfTodos }}</h6>
 
-  <hr />
+    <div v-if="!todos.length">검색 결과가 없습니다.</div>
 
-  <div class="mt-3">
-    <nav aria-label="Page navigation example ">
-      <ul class="pagination" style="justify-content: center">
-        <li v-if="currentPage !== 1" class="page-item">
-          <a
-            class="page-link"
-            @click="getTodos(currentPage - 1)"
-            aria-label="Previous"
+    <TodoList
+      :todos="todos"
+      @toggle-todo="toggleTodo"
+      @delete-todo="deleteTodo"
+    />
+
+    <hr />
+
+    <div class="mt-3">
+      <nav aria-label="Page navigation example ">
+        <ul class="pagination" style="justify-content: center">
+          <li v-if="currentPage !== 1" class="page-item">
+            <a
+              class="page-link"
+              @click="getTodos(currentPage - 1)"
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <li
+            v-for="page in list"
+            :key="page"
+            class="page-item"
+            :class="currentPage === page ? 'active' : ''"
           >
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
+            <a class="page-link" @click="getTodos(page)">{{ page }}</a>
+          </li>
 
-        <li
-          v-for="page in list"
-          :key="page"
-          class="page-item"
-          :class="currentPage === page ? 'active' : ''"
-        >
-          <a class="page-link" @click="getTodos(page)">{{ page }}</a>
-        </li>
-
-        <li
-          v-if="numberOfPages !== 0 && numberOfPages !== currentPage"
-          class="page-item"
-        >
-          <a
-            class="page-link"
-            @click="getTodos(currentPage + 1)"
-            aria-label="Next"
+          <li
+            v-if="numberOfPages !== 0 && numberOfPages !== currentPage"
+            class="page-item"
           >
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+            <a
+              class="page-link"
+              @click="getTodos(currentPage + 1)"
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </template>
 
 
 <script>
 import { ref, computed, watch } from "vue";
-import TodoSimpleForm from "@/components/TodoSimpleForm.vue";
+
 import TodoList from "@/components/TodoList.vue";
 import axios from "axios";
 import Toast from "@/components/Toast.vue";
 import { useToast } from "@/composables/toast";
 
+import { useRouter } from "vue-router";
+
 export default {
   components: {
-    TodoSimpleForm,
     TodoList,
     Toast,
   },
   setup() {
+    const router = useRouter();
     const todos = ref([]);
     const error = ref("");
     const numberOfTodos = ref(0); //전체 게시글 갯수
@@ -95,25 +105,16 @@ export default {
     const { toastMessage, toastAllertType, showToast, triggerToast } =
       useToast();
 
-    // const showToast = ref(true);
-    // const toastMessage = ref("");
-    // const toastAllertType = ref("");
-    // const toasTimeout = ref("");
-    // const triggerToast = (message, type = "success") => {
-    //   toastMessage.value = message;
-    //   toastAllertType.value = type;
-    //   showToast.value = true;
-    //   toasTimeout.value = setTimeout(() => {
-    //     toastMessage.value = "";
-    //     toastAllertType.value = "";
-    //     console.log("setTimeOut");
-    //     showToast.value = false;
-    //   }, 3000);
-    // };
-
     let timeout = null;
     const searchTodo = () => {
       getTodos(1);
+    };
+
+    const moveToCreatePage = () => {
+      console.log("tes");
+      router.push({
+        name: "TodoCreate",
+      });
     };
 
     watch(searchText, () => {
@@ -278,6 +279,7 @@ export default {
       showToast,
       toastMessage,
       toastAllertType,
+      moveToCreatePage,
     };
   },
 };
