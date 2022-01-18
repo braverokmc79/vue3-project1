@@ -9,7 +9,9 @@
             <input type="text" class="form-control" v-model="todo.subject" />
 
             <div v-if="subjectError" class="m-3">
-              <span class="alert alert-danger"> {{ subjectError }}</span>
+              <span class="alert alert-danger text-red">
+                {{ subjectError }}</span
+              >
             </div>
           </div>
         </div>
@@ -175,4 +177,7 @@ export default {
 </script>
 
 <style scoped>
+.text-red {
+  color: red;
+}
 </style>
