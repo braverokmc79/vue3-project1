@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card mt-3" v-for="(todo, index) in todos" :key="todo.id">
+    <div class="card mt-3" v-for="todo in todos" :key="todo.id">
       <div
         class="card-body p-2 d-flex align-items-center"
         @click="moveTopage(todo.id)"
@@ -19,19 +19,29 @@
         </div>
 
         <div>
-          <button class="btn btn-danger btn-sm" @click.stop="deleteTodo(index)">
+          <button
+            class="btn btn-danger btn-sm"
+            @click.stop="openModal(todo.id)"
+          >
             Delete
           </button>
         </div>
       </div>
     </div>
   </div>
+
+  <Modal v-if="showModal" @close="closeModal" />
 </template>
 
 <script>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import Modal from "@/components/Modal.vue";
 
 export default {
+  components: {
+    Modal,
+  },
   props: {
     todos: {
       type: Array,
@@ -41,9 +51,21 @@ export default {
   emits: ["toggle-todo", "delete-todo"],
   setup(props, { emit }) {
     const router = useRouter();
-
+    const showModal = ref(false);
+    const todoDeletedId = ref(null);
     const toggleTodo = (todo) => {
       emit("toggle-todo", todo);
+    };
+
+    const openModal = (id) => {
+      console.log("아이디 값 :" + id);
+      todoDeletedId.value = id;
+      showModal.value = true;
+    };
+
+    const closeModal = () => {
+      todoDeletedId.value = null;
+      showModal.value = false;
     };
 
     const deleteTodo = (todo) => {
@@ -67,6 +89,9 @@ export default {
       deleteTodo,
       toggleTodo,
       moveTopage,
+      showModal,
+      openModal,
+      closeModal,
     };
   },
 };
