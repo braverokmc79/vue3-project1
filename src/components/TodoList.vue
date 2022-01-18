@@ -5,20 +5,17 @@
         class="card-body p-2 d-flex align-items-center"
         @click="moveTopage(todo.id)"
       >
-        <div class="form-check flex-grow-1">
+        <div class="flex-grow-1">
           <input
+            class="ml-2 mr-2"
             type="checkbox"
-            class="form-check-input"
             v-model="todo.completed"
             @change="toggleTodo(todo)"
             @click.stop
           />
-          <label
-            class="form-check-label"
-            :class="{ todo: todo.completed ? 'todo' : '' }"
-          >
+          <span :class="{ todo: todo.completed ? 'todo' : '' }">
             {{ todo.subject }}
-          </label>
+          </span>
         </div>
 
         <div>
