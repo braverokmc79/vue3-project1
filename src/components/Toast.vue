@@ -22,7 +22,7 @@ export default {
 <style scoped>
 .toast-box {
   position: fixed;
-  top: 10px;
+  top: 50px;
   right: 10px;
 }
 </style>

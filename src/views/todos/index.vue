@@ -1,4 +1,5 @@
 <template>
+  <Toast v-if="showToast" :message="toastMessage" :type="toastAllertType" />
   <h2>To-Do List</h2>
   <input
     type="text"
@@ -70,11 +71,14 @@ import { ref, computed, watch } from "vue";
 import TodoSimpleForm from "@/components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
 import axios from "axios";
+import Toast from "@/components/Toast.vue";
+import { useToast } from "@/composables/toast";
 
 export default {
   components: {
     TodoSimpleForm,
     TodoList,
+    Toast,
   },
   setup() {
     const todos = ref([]);
@@ -86,8 +90,26 @@ export default {
     let first = null; // 첫번째 페이지번호
     let end = null; // 마지막 페이지 번호
     let list = ref([]); // 페이지 block 에 표시할 번호들
-
     const searchText = ref("");
+
+    const { toastMessage, toastAllertType, showToast, triggerToast } =
+      useToast();
+
+    // const showToast = ref(true);
+    // const toastMessage = ref("");
+    // const toastAllertType = ref("");
+    // const toasTimeout = ref("");
+    // const triggerToast = (message, type = "success") => {
+    //   toastMessage.value = message;
+    //   toastAllertType.value = type;
+    //   showToast.value = true;
+    //   toasTimeout.value = setTimeout(() => {
+    //     toastMessage.value = "";
+    //     toastAllertType.value = "";
+    //     console.log("setTimeOut");
+    //     showToast.value = false;
+    //   }, 3000);
+    // };
 
     let timeout = null;
     const searchTodo = () => {
@@ -171,6 +193,7 @@ export default {
             todos.value = res.data;
           });
       } catch (error) {
+        triggerToast("데이트를 가져오는데 문제가 발생했습니다.", "danger");
         error.value = "데이트를 가져오는데 문제가 발생했습니다.";
       }
     };
@@ -185,9 +208,11 @@ export default {
           subject: todo.subject,
           completed: todo.completed,
         });
+
+        triggerToast("Successfully saved!!");
         getTodos(1);
       } catch (err) {
-        error.value = "데이트를 가져오는데 문제가 발생했습니다.";
+        //error.value = "데이트를 가져오는데 문제가 발생했습니다.";
       }
     };
 
@@ -198,6 +223,7 @@ export default {
         await axios.delete("http://localhost:3000/todos/" + id);
         getTodos(1);
       } catch (err) {
+        triggerToast("데이트를 가져오는데 문제가 발생했습니다.", "danger");
         console.log(err);
         error.value = "데이트를 가져오는데 문제가 발생했습니다.";
       }
@@ -213,6 +239,7 @@ export default {
 
         console.log(res);
       } catch (err) {
+        triggerToast("데이트를 가져오는데 문제가 발생했습니다.", "danger");
         console.log(err);
         error.value = "데이트를 가져오는데 문제가 발생했습니다.";
       }
@@ -247,6 +274,10 @@ export default {
       list,
       numberOfTodos,
       searchTodo,
+
+      showToast,
+      toastMessage,
+      toastAllertType,
     };
   },
 };
