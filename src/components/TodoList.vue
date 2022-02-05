@@ -1,33 +1,40 @@
 <template>
   <div>
-    <div class="card mt-3" v-for="todo in todos" :key="todo.id">
+    <!-- <div class="card mt-3" v-for="todo in todos" :key="todo.id"> -->
+    <List :items="todos">
+     
+     <template #default="{item, index}">
       <div
         class="card-body p-2 d-flex align-items-center"
-        @click="moveTopage(todo.id)"
+        @click="moveTopage(item.id)"
       >
         <div class="flex-grow-1">
+          {{index}}
           <input
             class="ml-2 mr-2"
             type="checkbox"
-            v-model="todo.completed"
-            @change="toggleTodo(todo)"
+            v-model="item.completed"
+            @change="toggleTodo(item)"
             @click.stop
           />
-          <span :class="{ todo: todo.completed ? 'todo' : '' }">
-            {{ todo.subject }}
+          <span :class="{ todo: item.completed ? 'todo' : '' }">
+            {{ item.subject }}
           </span>
         </div>
 
         <div>
           <button
             class="btn btn-danger btn-sm"
-            @click.stop="openModal(todo.id)"
+            @click.stop="openModal(item.id)"
           >
             Delete
           </button>
         </div>
       </div>
-    </div>
+    
+     </template>
+    </List>
+    <!-- </div> -->
   </div>
 
   <teleport to="#modal">
@@ -40,10 +47,11 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 //import Modal from "@/components/Modal.vue";
 import Modal from "@/components/DeleteModal.vue";
-
+import List from "@/components/List.vue";
 export default {
   components: {
     Modal,
+    List
   },
   props: {
     todos: {

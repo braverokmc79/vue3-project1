@@ -1,9 +1,9 @@
 <template>
   <Modal @close="closeModal" @delete="deleteTodo">
-    <template v-slot:title> Delete Todo!!!</template>
-    <template v-slot:body>Are you sure you want to delete the todo?</template>
+    <template #title> Delete Todo!!!</template>
+    <template #body>Are you sure you want to delete the todo?</template>
 
-    <template v-slot:footer>
+    <template #footer>
       <button
         type="button"
         @click="onClose"
