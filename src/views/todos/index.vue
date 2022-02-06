@@ -1,6 +1,5 @@
 <template>
   <div style="opacity: 1">
-
     <div class="d-flex justify-content-between mb-3">
       <h2>To-Do List</h2>
       <button type="button" class="btn btn-primary" @click="moveToCreatePage">
@@ -33,41 +32,19 @@
     <hr />
 
     <div class="mt-3">
-      <nav aria-label="Page navigation example ">
-        <ul class="pagination" style="justify-content: center">
-          <li v-if="currentPage !== 1" class="page-item">
-            <a
-              class="page-link"
-              @click="getTodos(currentPage - 1)"
-              aria-label="Previous"
-            >
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
+ 
+      
+      <Pagination 
+        v-if="todos.length"
+        :numberOfPages="numberOfPages"  
+        :currentPage="currentPage"
+        :list="list"
+        @click="getTodos"  
+        
+      />
 
-          <li
-            v-for="page in list"
-            :key="page"
-            class="page-item"
-            :class="currentPage === page ? 'active' : ''"
-          >
-            <a class="page-link" @click="getTodos(page)">{{ page }}</a>
-          </li>
 
-          <li
-            v-if="numberOfPages !== 0 && numberOfPages !== currentPage"
-            class="page-item"
-          >
-            <a
-              class="page-link"
-              @click="getTodos(currentPage + 1)"
-              aria-label="Next"
-            >
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+
     </div>
   </div>
 </template>
@@ -75,16 +52,17 @@
 
 <script>
 import { ref, computed, watch } from "vue";
-
 import TodoList from "@/components/TodoList.vue";
 import axios from "@/axios";
 import { useToast } from "@/composables/toast";
-
 import { useRouter } from "vue-router";
+import Pagination from "@/components/Pagination.vue";
+
 
 export default {
   components: {
     TodoList,
+    Pagination
   },
   setup() {
     const router = useRouter();
@@ -277,6 +255,7 @@ export default {
       toastMessage,
       toastAllertType,
       moveToCreatePage,
+      
     };
   },
 };
