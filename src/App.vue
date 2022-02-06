@@ -73,6 +73,12 @@ import { useToast } from "@/composables/toast";
 import {useStore} from "vuex";
 
 export default {
+
+  created(){
+    this.$store.commit("UPDATE_TOAST_STATUS", );
+    this.$store.commit("UDATE_MESSAGE", "kossie");
+  },
+
   components: {
     Toast,
   },
