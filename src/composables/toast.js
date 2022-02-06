@@ -3,32 +3,16 @@ import { useStore } from 'vuex';
 
 export const useToast = () => {
     const store = useStore();
-  
-    //const toastMessage = computed(() => store.state.toastMessage);
-    const toastMessage = computed(() => store.getters.toastMessageWithSmile);
-    const toastAllertType = computed(() => store.state.toastAllertType);
-    const showToast = computed(() => store.state.showToast);
-   // const timeout = computed(() => store.state.timeout);
-   const triggerToast = (message, type = "success") => {
-            //     toastMessage.value = message;
-            //     toastAllertType.value = type;
-            //     showToast.value = true;
-            //     timeout.value = setTimeout(() => {
-            //         toastMessage.value = "";
-            //         toastAllertType.value = "";
-            //         console.log("setTimeOut");
-            //         showToast.value = false;
-            //     }, 3000);
-       
-       store.dispatch('triggerToast', message, type);
+    const toastMessage = computed(() => store.getters['toast/toastMessageWithSmile'] );
+    const toastAllertType = computed(() => store.state.toast.toastAllertType);
+    const showToast = computed(() => store.state.toast.showToast);
+   
+    const triggerToast = (message, type = "success") => {
+        store.dispatch('toast/triggerToast', message, type);
    };
 
     
-    // onUnmounted(() => {
-    //     console.log("onUnmounted");
-    //     clearTimeout(timeout.value);
-    // });
-    return {
+   return {
         toastMessage,
         toastAllertType,
         showToast,

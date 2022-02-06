@@ -64,9 +64,7 @@
       </button>
     </form>
 
-    <transition name="fade">
-      <Toast v-if="showToast" :message="toastMessage" :type="toastAllertType" />
-    </transition>
+
   </div>
 </template>
 
@@ -75,14 +73,13 @@ import { computed, onUpdated, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "@/axios";
 import _ from "lodash";
-import Toast from "@/components/Toast.vue";
+
 import { useToast } from "@/composables/toast";
 import Input from "@/components/Input.vue";
 import {useStore} from "vuex";
 
 export default {
   components: {
-    Toast,
     Input
   },
 

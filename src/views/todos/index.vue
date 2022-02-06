@@ -1,6 +1,5 @@
 <template>
   <div style="opacity: 1">
-    <Toast v-if="showToast" :message="toastMessage" :type="toastAllertType" />
 
     <div class="d-flex justify-content-between mb-3">
       <h2>To-Do List</h2>
@@ -79,7 +78,6 @@ import { ref, computed, watch } from "vue";
 
 import TodoList from "@/components/TodoList.vue";
 import axios from "@/axios";
-import Toast from "@/components/Toast.vue";
 import { useToast } from "@/composables/toast";
 
 import { useRouter } from "vue-router";
@@ -87,7 +85,6 @@ import { useRouter } from "vue-router";
 export default {
   components: {
     TodoList,
-    Toast,
   },
   setup() {
     const router = useRouter();
