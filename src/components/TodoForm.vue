@@ -78,6 +78,7 @@ import _ from "lodash";
 import Toast from "@/components/Toast.vue";
 import { useToast } from "@/composables/toast";
 import Input from "@/components/Input.vue";
+import {useStore} from "vuex";
 
 export default {
   components: {
@@ -92,6 +93,9 @@ export default {
     },
   },
   setup(props) {
+    const store=useStore();
+    console.log(store.state.showToast);
+
     const route = useRoute();
     const router = useRouter();
     const todo = ref({

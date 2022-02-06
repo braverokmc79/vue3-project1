@@ -70,12 +70,16 @@
 <script>
 import Toast from "@/components/Toast.vue";
 import { useToast } from "@/composables/toast";
+import {useStore} from "vuex";
 
 export default {
   components: {
     Toast,
   },
   setup() {
+    const store =useStore();
+    console.log(store.state.showToast);
+
     const { 
       toastMessage,
       toastAllertType, 
@@ -83,6 +87,8 @@ export default {
       triggerToast 
     } =useToast();
      
+    console.log(showToast.value);
+
      return{
            toastMessage,
           toastAllertType, 
