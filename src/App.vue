@@ -61,68 +61,53 @@
   </div>
 
 
-<transition name="slide">
-  <Toast 
-    v-if="showToast" :message="toastMessage" :type="toastAllertType"
-   />
-</transition>
+
+  <Toast  />
+
 
 </template>
 
 
 <script>
 import Toast from "@/components/Toast.vue";
-import { useToast } from "@/composables/toast";
-import {useStore} from "vuex";
 
 export default {
 
-  created(){
-    this.$store.commit("UPDATE_TOAST_STATUS", );
-    this.$store.commit("UDATE_MESSAGE", "kossie");
-  },
+  // created(){
+  //   this.$store.commit("UPDATE_TOAST_STATUS", );
+  //   this.$store.commit("UDATE_MESSAGE", "kossie");
+  // },
 
   components: {
     Toast,
   },
-  setup() {
-    const store =useStore();
-    console.log(store.state.showToast);
+  // setup() {
+  //   const store =useStore();
+  //   console.log(store.state.showToast);
 
-    const { 
-      toastMessage,
-      toastAllertType, 
-      showToast, 
-      triggerToast 
-    } =useToast();
+  //   const { 
+  //     toastMessage,
+  //     toastAllertType, 
+  //     showToast, 
+  //     triggerToast 
+  //   } =useToast();
      
-    console.log(showToast.value);
+  //   console.log(showToast.value);
 
-     return{
-           toastMessage,
-          toastAllertType, 
-          showToast, 
-          triggerToast 
-     }
-  },
+  //    return{
+  //         toastMessage,
+  //         toastAllertType, 
+  //         showToast, 
+  //         triggerToast 
+  //    }
+  // },
+
+
+
 };
 </script>
 
 <style scoped>
 
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.5s ease;
-}
-.slide-enter-from,
-.slide-leave-to {
-  opacity: 0;
-  transform: translateY(-60px);
-}
 
-.slide-enter-to,
-.slide-leave-from {
-  opacity: 1;
-  transform: translateY(0px);
-}
 </style>
