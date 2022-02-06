@@ -78,7 +78,7 @@
 import { ref, computed, watch } from "vue";
 
 import TodoList from "@/components/TodoList.vue";
-import axios from "axios";
+import axios from "@/axios";
 import Toast from "@/components/Toast.vue";
 import { useToast } from "@/composables/toast";
 
@@ -160,7 +160,7 @@ export default {
       try {
         await axios
           .get(
-            `http://localhost:3000/todos/?subject_like=${searchText.value}&_sort=id&_order=desc&_page=${page}&_limit=${limit}`
+            `todos/?subject_like=${searchText.value}&_sort=id&_order=desc&_page=${page}&_limit=${limit}`
           )
           .then((res) => {
             //1.전체 게시글 갯수 가져오기
@@ -205,7 +205,7 @@ export default {
       //데이터베이스 todo 를 저장
       error.value = "";
       try {
-        await axios.post("http://localhost:3000/todos/", {
+        await axios.post("todos/", {
           subject: todo.subject,
           completed: todo.completed,
         });
@@ -221,7 +221,7 @@ export default {
       error.value = "";
 
       try {
-        await axios.delete("http://localhost:3000/todos/" + id);
+        await axios.delete("todos/" + id);
         getTodos(1);
       } catch (err) {
         triggerToast("데이트를 가져오는데 문제가 발생했습니다.", "danger");
@@ -234,7 +234,7 @@ export default {
       error.value = "";
       console.log(id, completed);
       try {
-        const res = await axios.patch("http://localhost:3000/todos/" + id, {
+        const res = await axios.patch("todos/" + id, {
           completed: completed,
         });
 
