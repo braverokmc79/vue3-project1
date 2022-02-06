@@ -77,7 +77,7 @@ import axios from "axios";
 import _ from "lodash";
 import Toast from "@/components/Toast.vue";
 import { useToast } from "@/composables/toast";
-import Input from "@/components/input.vue";
+import Input from "@/components/Input.vue";
 
 export default {
   components: {
